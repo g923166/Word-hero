@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Word Hero 小勇士</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; text-align: center; padding: 50px; background: #f0f8ff; }
+    h1 { color: #2a5d84; }
+    .word-box { font-size: 28px; margin: 20px; }
+    button { padding: 10px 20px; font-size: 18px; background: #2a5d84; color: white; border: none; border-radius: 10px; }
+    #result { font-size: 20px; margin-top: 30px; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Word Hero 小勇士 - 聲音猜單字</h1>
+  <div class="word-box">
+    請說出這個英文單字：<strong>錢</strong>
+  </div>
+  <button onclick="startRecognition()">開始說話</button>
+  <div id="result">等待語音輸入...</div>
+
+  <script>
+    const correctWord = "money";
+    function startRecognition() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = function(event) {
+        const said = event.results[0][0].transcript.toLowerCase();
+        document.getElementById("result").innerText =
+          said === correctWord ? "答對了！你說的是：" + said : "你說的是：「" + said + "」，再試一次！";
+      };
+
+      recognition.onerror = function(event) {
+        document.getElementById("result").innerText = "錯誤：" + event.error;
+      };
+
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
